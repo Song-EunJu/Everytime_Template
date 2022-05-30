@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block hihi %}
+  <div id="container" class="community">
+    <aside class="none">
+      <form class="search">
+        <input type="search" name="keyword" class="text" placeholder="전체 게시판의 글을 검색하세요!">
+      </form>
+      <div class="title">
+        <a class="hamburger"></a>
+        <h1>숭실대 에브리타임</h1>
+        <ol class="buttons">
+          <li><a id="searchArticle">글 검색</a></li>
+        </ol>
+      </div>
+    </aside>
+    <div class="banners">
+      <a href="https://ad.everytime.kr/adClick?adToken=R%2F1ZACharxDxPbALNEZtYRBN%2BzaR5RY87mfjeH8gr6%2FlcHKJWGsdJxi%2BGHptQRYkLYjcGebL6vBCntn8yWF0f9bo6%2F5rJpZ0FT9nEGUkE%2BLccp%2Bhl8Ro1wcH94kydCu%2BwmgADfyYLUkc7vnm0HOpCy9nBR7Mgb4TgyFFZSeUS6%2BVhAz3rXDVG%2FCUCgwma4ig1SeQZAW46WhGJLhlmfXx39QD4xBeP3FpBOF5pLVAbMIDCDMlXgekFHNOj%2BcNSZ1Q"><img src="https://cf-eba.everytime.kr/20220508_Naver45_ClovaDubbing_B1_home.png"></a>
+    </div>
+    <div class="leftside">
+      <div class="card pconly">
+        <form class="logged">
+          <img src="https://cf-fpi.everytime.kr/0.png" class="picture">
+          <p class="nickname">{{user.nickname}}</p>
+          {% if user.is_authenticated %} 
+          <p class="school">{{user.username}}</p>
+          <ul class="buttons">
+            <li><a href="/my">내 정보</a></li>
+            <li><a href="{% url 'logout' %}">로그아웃</a></li>
+          </ul>
+          {% else %}
+          <p class="school">로그인 해주세요</p>
+          <ul class="buttons">
+            <li><a href="{% url 'login' %}">로그인</a></li>
+          </ul>
+          {% endif %}
+          <hr>
+        </form>
+        <!-- <form class="logged">
+          <img src="https://cf-fpi.everytime.kr/0.png" class="picture">
+          <p class="nickname">익91</p>
+          <p class="school">송은주</p>
+          <p class="school">jd06280</p>
+          <ul class="buttons">
+            <li><a href="/my">내 정보</a></li>
+            <li><a href="/user/logout">로그아웃</a></li>
+          </ul>
+          <hr>
+        </form> -->
+      </div>
+      <div class="card">
+        <div class="menus">
+          <a href="/myarticle" class="myarticle">내가 쓴 글</a>
+          <a href="/mycommentarticle" class="mycommentarticle">댓글 단 글</a>
+          <a href="/myscrap" class="myscrap">내 스크랩</a>
+          <hr>
+        </div>
+      </div>
+      <div class="card">
+        <div class="banner">
+          <a href="https://ad.everytime.kr/adClick?adToken=x20NyUz4RK3s4tVkTqEqYww4K8r7How%2BnY5gCfKpbfPppa43MQ6ALPj4URu0qrT%2FqYhaUW3RWrqSeqNW6mjTbQhWZfozv6MtpruEGkoZxyiWyNxlET6e7EtKybUUTKyo%2FK7UtLOCQv9GMwf73Svy8fTAUygWLQ%2BeitoSC%2B4M5C5vcuNtVbamGsSAVfzYacKAxptcOP0RKfqSZPp85swSrmOiy37bt8xpqOTxTDWdEJ%2F2aeDRQI%2BgXuZImlAOM%2BqU"><img src="https://cf-eba.everytime.kr/20220504_Adobe_Alwayson56_01_Campaign_card.png"></a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="banner">
+          <a href="https://ad.everytime.kr/adClick?adToken=x20NyUz4RK3s4tVkTqEqYww4K8r7How%2BnY5gCfKpbfPppa43MQ6ALPj4URu0qrT%2FqYhaUW3RWrqSeqNW6mjTbQhWZfozv6MtpruEGkoZxyiWyNxlET6e7EtKybUUTKyo%2FK7UtLOCQv9GMwf73Svy8fTAUygWLQ%2BeitoSC%2B4M5C6skTVF0RVpNq4Z8Zq3%2BhFrkbkt35EenGWtdiuBf3wOvI4ii%2B%2B%2BKGkhev3Ef0EmhKEkfBJ40FetCz5KxLwoNaDC"><img src="https://cf-eba.everytime.kr/20220509_adobe_ER_A_card.jpg"></a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="banner">
+          <a href="https://ad.everytime.kr/adClick?adToken=x20NyUz4RK3s4tVkTqEqYww4K8r7How%2BnY5gCfKpbfPppa43MQ6ALPj4URu0qrT%2FqYhaUW3RWrqSeqNW6mjTbQhWZfozv6MtpruEGkoZxyiWyNxlET6e7EtKybUUTKyo%2FK7UtLOCQv9GMwf73Svy8fTAUygWLQ%2BeitoSC%2B4M5C6R%2BSqIroLaWuyyGMrbpOzuWkNa6DQK0idGXQV0tPZB90VKxff%2F0xe7oT%2B35dZ%2BXzEVVcQGZ9YtEyuirhedrzmL"><img src="https://cf-eba.everytime.kr/homecard220428.png"></a>
+        </div>
+      </div>
+    </div>
+    <div class="rightside"></div>
+    <div class="main"></div>
+  </div>
+<div id="bottom">
+    <ul class="links">
+      <li><a href="/page/serviceagreement">이용약관</a></li>
+      <li class="privacy"><a href="/page/privacy">개인정보처리방침</a></li>
+      <li><a href="/page/rules">커뮤니티이용규칙</a></li>
+      <li><a href="/notice">공지사항</a></li>
+      <li><a href="/page/faq">문의하기</a></li>
+      <li class="copyright"><a href="/">&copy; 에브리타임</a></li>
+    </ul>
+  </div>
+  <script type="text/javascript">
+    var _serverTime = 1652418798976;
+    var _clientTime = new Date().getTime();
+    var _diffTime = _clientTime - _serverTime;
+    var _apiServerUrl = 'https://api.everytime.kr';
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-22022140-4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-22022140-4');
+  </script>
+</div>
+{% endblock %}

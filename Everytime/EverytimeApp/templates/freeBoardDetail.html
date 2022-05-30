@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block hihi %}
+
+<div id="container" class="article">
+    <input type="hidden" id="isUser" value="1">
+    <input type="hidden" id="boardId" value="370455">
+    <aside class="none">
+      <div class="title">
+        <a class="hamburger"></a>
+      <h1><a href="/370455">자유게시판</a></h1></div>
+    </aside>
+    <div class="wrap title">
+        <h1><a href="/370455">자유게시판</a></h1>
+        <hr>
+    </div>
+    <div class="wrap articles">
+        <a id="writeArticleButton" style="display: none;">새 글을 작성해주세요!</a>
+        <article>
+            <a class="article">
+                <img src="https://cf-fpi.everytime.kr/0.png" class="picture large">
+                <div class="profile">
+                    <h3 class="large">{{ post_detail.user.nickname }}</h3>
+                    <time class="large">{{ post_detail.created_string }}</time>
+                </div>
+
+                {% if post_detail.user.id == user.id %}
+                <ul class="status">
+                    <li><a href="{% url 'update' post_detail.id %}" class="update">수정</a></li>
+                    <li><a href="{% url 'delete' post_detail.id %}" class="delete">삭제</a></li>
+                </ul>
+                {% else %}
+                <ul class="status">
+                    <li class="messagesend" data-modal="messageSend" data-article-id="251821204" data-is-anonym="1">쪽지</li>
+                    <li class="abuse">신고</li>
+                </ul>
+                {% endif %}
+                <hr>
+                <h2 class="large">{{ post_detail.title }}</h2>
+                <p class="large">{{ post_detail.content }}</p>
+
+                {% if post_detail.file %}
+                <div class="attaches full">
+                    <figure class="attach">
+                        <img src="/media/{{ post_detail.file }}" />
+                    </figure>
+                </div>
+                {% endif %}
+
+                <ul class="status left">
+                    <li title="공감" class="vote">0</li>
+                    <li title="댓글" class="comment"> {{ post_detail.comment_set.all.count }}</li>
+                    <li title="스크랩" class="scrap">0</li>
+                </ul>
+                <hr>
+                <div class="buttons">
+                    <span class="posvote">공감</span>
+                    <span class="scrap">스크랩</span>
+                </div>
+                <input type="hidden" name="251821204_comment_anonym" value="0">
+            </a>
+            <div class="comments" style="display: block;">
+                <form action="{% url 'createComment' post_detail.id %}" class="writecomment" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="comment" maxlength="300" autocomplete="off" placeholder="댓글을 입력하세요." class="text">
+                    <ul class="option">
+                        <input type="submit">
+                    </ul>
+                    <div class="clearBothOnly"></div>
+                </form>
+            </div>
+
+            <div class="comments" style="display: block;"> 
+                {% for comment in post_detail.comment_set.all %}
+                    <article class="parent">
+                        <img src="https://cf-fpi.everytime.kr/0.png" class="picture medium">
+                        <h3 class="medium">{{comment.user.nickname}}</h3>
+                        <ul class="status">
+                            <li class="commentvote">공감</li>
+                            <li class="messagesend" data-modal="messageSend" data-comment-id="1180589736" data-is-anonym="1">쪽지</li>
+                            <li class="abuse">신고</li>
+                        </ul>
+                        <hr>
+                        <p class="large">{{comment.comment}}</p>
+                        <time class="medium">{{comment.created_string}}</time>
+                        <ul class="status commentvotestatus">
+                            <li class="vote commentvote" style="display: list-item;">좋아요 개수</li>
+                        </ul>
+                    </article> 
+                {% endfor %}
+            </div>
+{% endblock %}

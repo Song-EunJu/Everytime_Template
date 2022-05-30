@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block hihi %}
+
+<div id="container" class="article">
+    <input type="hidden" id="isUser" value="1">
+    <input type="hidden" id="boardId" value="370455">
+    <aside class="none">
+      <div class="title">
+        <a class="hamburger"></a>
+      <h1><a href="/370455">자유게시판</a></h1></div>
+    </aside>
+    <div class="wrap title">
+        <h1><a href="/370455">자유게시판</a></h1>
+        <hr>
+    </div>
+
+    <div class="wrap articles">
+        <form action="{% url 'update' post_detail.id %}" class="write" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p><input name="title" autocomplete="off" placeholder="" class="title" value="{{post_detail.title}}"></p>
+            <p><textarea name="content" class="smallplaceholder">{{post_detail.content}}</textarea></p>
+            <input class="file" type="file" name="file" multiple="multiple">
+            <ol class="thumbnails" style="display: block;">
+                {% if post_detail.file %}
+                <img src="/media/{{ post_detail.file }}"/>
+                {% endif %}
+            </ol>
+            <div class="clearBothOnly"></div>
+            <ul class="option">
+                <li title="완료" class="submit">
+                    <input type="submit">
+                </li>
+            </ul>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block hihi %}
+
+<div id="container" class="article">
+    <input type="hidden" id="isUser" value="1">
+    <input type="hidden" id="boardId" value="370455">
+    <aside class="none">
+      <div class="title">
+        <a class="hamburger"></a>
+      <h1><a href="/370455">자유게시판</a></h1>
+    </div>
+    </aside>
+    <div class="wrap title">
+        <h1><a href="/370455">자유게시판</a></h1>
+        <hr>
+    </div>
+    <div class="wrap articles">
+        <!-- <form action="{% url 'create' %}" class="write" method="POST">
+            {% csrf_token %} 
+        
+            <p><input name="title" autocomplete="off" placeholder="글 제목" class="title"></p>
+            <p><textarea name="content" placeholder="글을 입력해주쇼" class="smallplaceholder"></textarea></p>
+            <input class="file" type="file" name="file" multiple="multiple">
+            <input type="submit" value="새 글 생성하기">
+        
+        </form> -->
+        <form action="{% url 'create' %}" class="write" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p><input name="title" autocomplete="off" placeholder="글 제목" class="title"></p>
+            <p><textarea name="text" placeholder="글을 작성해주세요" class="smallplaceholder"></textarea></p>
+            
+            <ol class="thumbnails">
+                <li class="new"></li>
+            </ol>
+            <div class="clearBothOnly"></div>
+                <ul class="option">
+                    <li title="첨부" class="attach">            
+                        <input multiple="multiple" type="file" class="file" name="file" multiple="multiple">
+                        <!-- <input type="file" class="file" name="file" > -->
+                    </li>
+                    <li title="완료" class="submit">
+                        <input type="submit">
+                    </li>
+                </ul>
+            <div class="clearBothOnly"></div>
+        </form>
+        {% for post in posts %}
+        <article>
+            <a class="article" href="{% url 'detail' post.id %}">
+                <!-- 난 이걸 눌럿을 때 어떤 url 로 이동하고 싶은데 그 url은 freeBoard라는 문자열을 갖고 있는 url 인데 , 
+                    근데 걔는 post의 id라는 추가적인 정보도 필요할거야! 라는 뜻 -->
+                <h2 class="medium">{{ post.title }}</h2>
+                <p class="small">{{ post.content }}</p>
+                <!-- <time cass="small">{{ post.date }}</time> -->
+
+                {% if post.created_string == False %}
+                    <time class="small">{{ post.date | date:'m월 d일' }}</time>
+                {% else %}
+                    <time class="small">{{ post.created_string }}</time>
+                {% endif %}
+                <h3 class="small">{{ post.user.nickname }}</h3>
+
+                <ul class="status">
+                    <li title="공감" class="vote">0</li>
+                    <li title="댓글" class="comment"> {{ post.comment_set.all.count }} </li>
+                </ul>
+                <hr>
+                <input type="hidden" name="251688301_comment_anonym" value="0">
+            </a>
+            <div class="comments"></div>
+        </article>
+        {% endfor %}
+
+        <!-- 게시판 객체들이 바로보이는게 아니라 query set이라는 형태로 감싸져서
+        보여지기 때문에 템플릿언어의 for문으로 query set 을 돌면서 하나하나 board를 찍어줘야함-->
+
+<!-- 
+        <div class="pagination">
+            <form action="{% url 'search' %}" id="searchArticleForm" class="search" method="POST">
+                {% csrf_token %}
+                <input name="search" placeholder="검색어를 입력하세요." class="text">
+                <input type="submit">
+            </form>
+        </div>
+        <br>
+        <br>
+        <br> -->
+
+
+        <!-- 페이지네이션 -->
+        <!-- 첫페이지와 마지막페이지로 바로 갈 수 있는 버튼과 -->
+        <!-- 이전, 다음 페이지로 바로갈 수 있는 버튼 -->
+        <a href="?page=1">첫페이지</a>
+        <a href="?page={{posts.paginator.num_pages}}">마지막 페이지</a>
+        <!-- posts 라는 짤린 객체가 갖고 있는 총 페이지의 수 -->
+
+        <br>
+        {% if posts.has_previous %}  
+        <!-- 지금 잘라서 보낸 page 들이 이전페이지가 있다면 -->
+        <a href="?page={{posts.previous_page_number}}">이전 페이지</a>
+        {% endif %}
+        
+        <!-- 현재 페이지 번호 -->
+        <span>{{posts.number}}</span>
+        <span>/</span>
+        <span>{{posts.paginator.num_pages}}</span>         
+
+        {% if posts.has_next %}
+        <a href="?page={{posts.next_page_number}}">다음페이지</a>
+        {% endif %}
+    <hr>
+  </div>
+{% endblock %}
