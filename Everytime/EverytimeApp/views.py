@@ -8,30 +8,52 @@ from django.db.models import Q
 def landing(request):
     return render(request, 'landing.html')
 
-def main(request):
+def main(request): 
     return render(request, 'main.html')
 
 def free(request):
-    # 지금까지 데이터베이스에 저장한 글 객체들을 모조리 다 불러오고 싶다!
-    # 데이터베이스의 Board 객체들을 모두 보여주는 곳
-    # posts = Board.objects.all()
-    posts = Board.objects.filter().order_by('-date') ## 최신순부터 
-    print(posts)
-    paginator = Paginator(posts, 5) # 몇개씩 끊어서 보여줄거니?
-    page_num = request.GET.get('page') 
+    posts = Board.objects.filter().order_by('-date') 
+    
+    search = request.GET.get('search','')
+    # search 값이 아무것도 안들어오면 ''으로 처리
+
+    page = request.GET.get('page','1')
+    # 원래 page 값이 없으면 None 으로 넘어가는데 이렇게 써주면 default=1 로 설정해주는 것
+    # icontains는 대소문자 무시
+
+    if search: # 검색어가 있으면 
+        search_list = posts.filter(
+            Q(title__icontains = search) | #제목 
+            Q(content__icontains = search) | # 내용
+            Q(user__nickname__icontains = search) #글쓴이
+            # filter 함수에서 모델 속성에 접근하기 위해서는 이처럼 __ (언더바 두개) 를 이용하여 하위 속성에 접근
+            )
+
+        search_list = posts.filter(
+            Q(title__icontains = search) | 
+            Q(content__icontains = search) |
+            Q(user__nickname__icontains = search) 
+            )
+
+
+        paginator = Paginator(search_list,5)
+
+        search_list = paginator.get_page(page)
+        return render(request, 'freeBoardDefault.html', {'posts':search_list, 'search':search})
+    else:
+        paginator = Paginator(posts,5)
+        page = request.GET.get('page')
+        posts = paginator.get_page(page)
+        return render(request, 'freeBoardDefault.html', {'posts':posts})
+
     # 127.0.0.1:8000/free/?page=1
     # 127.0.0.1:8000/free/?page=2
     # 조회할 때 GET 요청을 사용
     # { page : 1} -> 딕셔너리 자료형 : 따라서 page 라는 키값에 해당하는 값을 받아오기 위해서 사용
 
-    
-
     # 몇 페이지에 있는 객체들의 목록을 띄워줄건지?
     # 1번 페이지를 갖고오겠다!
-    posts = paginator.get_page(page_num) 
-
     #freeBoardDefault 와 함께 이 데이터들을 가져가라! 딕셔너리 형태로! 
-    return render(request, 'freeBoardDefault.html', {'posts':posts})
 
 def graduate(request):
     return render(request, 'graduatedBoardDefault.html')

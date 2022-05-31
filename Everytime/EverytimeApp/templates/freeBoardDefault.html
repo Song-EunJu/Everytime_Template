@@ -74,39 +74,57 @@
         <!-- 게시판 객체들이 바로보이는게 아니라 query set이라는 형태로 감싸져서
         보여지기 때문에 템플릿언어의 for문으로 query set 을 돌면서 하나하나 board를 찍어줘야함-->
 
-<!-- 
+
         <div class="pagination">
-            <form action="{% url 'search' %}" id="searchArticleForm" class="search" method="POST">
-                {% csrf_token %}
-                <input name="search" placeholder="검색어를 입력하세요." class="text">
+            <form action="{% url 'free' %}" id="searchArticleForm" class="search" method="GET">
+                <input type="text" name="search" placeholder="검색어를 입력하세요." 
+                    class="text" value="">
                 <input type="submit">
             </form>
         </div>
         <br>
         <br>
-        <br> -->
+        <br>
 
 
         <!-- 페이지네이션 -->
         <!-- 첫페이지와 마지막페이지로 바로 갈 수 있는 버튼과 -->
         <!-- 이전, 다음 페이지로 바로갈 수 있는 버튼 -->
-        <a href="?page=1">첫페이지</a>
-        <a href="?page={{posts.paginator.num_pages}}">마지막 페이지</a>
-        <!-- posts 라는 짤린 객체가 갖고 있는 총 페이지의 수 -->
+        {% if search %}
+            <a href="?page=1&search={{search}}">첫페이지</a>
+            <a href="?page={{posts.paginator.num_pages}}&search={{search}}">마지막 페이지</a>
 
-        <br>
-        {% if posts.has_previous %}  
-        <!-- 지금 잘라서 보낸 page 들이 이전페이지가 있다면 -->
-        <a href="?page={{posts.previous_page_number}}">이전 페이지</a>
-        {% endif %}
-        
-        <!-- 현재 페이지 번호 -->
-        <span>{{posts.number}}</span>
-        <span>/</span>
-        <span>{{posts.paginator.num_pages}}</span>         
+            <br>
+            {% if posts.has_previous %}  
+            <a href="?page={{posts.previous_page_number}}&search={{search}}">이전 페이지</a>
+            {% endif %}
+            
+            <span>{{posts.number}}</span>
+            <span>/</span>
+            <span>{{posts.paginator.num_pages}}</span>         
 
-        {% if posts.has_next %}
-        <a href="?page={{posts.next_page_number}}">다음페이지</a>
+            {% if posts.has_next %}
+            <a href="?page={{posts.next_page_number}}&search={{search}}">다음페이지</a>
+            {% endif %}
+        {% else %}
+            <a href="?page=1">첫페이지</a>
+            <a href="?page={{posts.paginator.num_pages}}">마지막 페이지</a>
+            <!-- posts 라는 짤린 객체가 갖고 있는 총 페이지의 수 -->
+
+            <br>
+            {% if posts.has_previous %}  
+            <!-- 지금 잘라서 보낸 page 들이 이전페이지가 있다면 -->
+            <a href="?page={{posts.previous_page_number}}">이전 페이지</a>
+            {% endif %}
+            
+            <!-- 현재 페이지 번호 -->
+            <span>{{posts.number}}</span>
+            <span>/</span>
+            <span>{{posts.paginator.num_pages}}</span>         
+
+            {% if posts.has_next %}
+            <a href="?page={{posts.next_page_number}}">다음페이지</a>
+            {% endif %}
         {% endif %}
     <hr>
   </div>
